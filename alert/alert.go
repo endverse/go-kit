@@ -1,6 +1,7 @@
 package alert
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -28,6 +29,11 @@ func NewAlerter(config *AlerterConfiguration) (Alerter, error) {
 	}
 
 	return &alerter{
+		httpclient: resty.New().
+			SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true}).
+			SetHeader("Content-Type", "application/json").
+			SetRetryCount(3).
+			SetTimeout(500 * time.Millisecond),
 		config: config,
 	}, nil
 }
