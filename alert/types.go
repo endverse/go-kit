@@ -2,7 +2,6 @@ package alert
 
 import (
 	"bytes"
-	"fmt"
 	"html/template"
 
 	"github.com/spf13/pflag"
@@ -112,14 +111,11 @@ type GroupIdMsg struct {
 }
 
 type AlerterConfiguration struct {
-	Ak          string   `json:"ak"`
-	Sk          string   `json:"sk"`
-	Host        string   `json:"host"`
-	MessagePath string   `json:"messagePath"`
-	UserIdPath  string   `json:"useridPath"`
-	Admins      []string `json:"admins"`
-	AlertAdmin  bool     `json:"alertAdmin"`
-	AlertGroup  bool     `json:"alertGroup"`
+	Ak          string `json:"ak"`
+	Sk          string `json:"sk"`
+	Host        string `json:"host"`
+	MessagePath string `json:"messagePath"`
+	UserIdPath  string `json:"useridPath"`
 }
 
 func (o *AlerterConfiguration) AddFlags(fs *pflag.FlagSet) {
@@ -132,9 +128,6 @@ func (o *AlerterConfiguration) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Host, "host", o.Host, "Alerter remote server host.")
 	fs.StringVar(&o.MessagePath, "msg-path", o.MessagePath, "Alerter send alert message URI.")
 	fs.StringVar(&o.UserIdPath, "user-path", o.UserIdPath, "Alerter get users id URI.")
-	fs.StringSliceVar(&o.Admins, "admins", o.Admins, "Admins list.")
-	fs.BoolVar(&o.AlertAdmin, "alert-admin", o.AlertAdmin, "If it is true, it will send alert message to admins. And admins must be not empty.")
-	fs.BoolVar(&o.AlertGroup, "alert-group", o.AlertGroup, "If it is true, it will send alert message to groups.")
 }
 
 func (o *AlerterConfiguration) Validate() []error {
@@ -143,10 +136,6 @@ func (o *AlerterConfiguration) Validate() []error {
 	}
 
 	var errs []error
-	if o.AlertAdmin && (o.Admins == nil || len(o.Admins) < 1) {
-		errs = append(errs, fmt.Errorf("SendAdmin is true, but admins is empty"))
-	}
-
 	return errs
 }
 

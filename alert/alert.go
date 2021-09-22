@@ -33,10 +33,6 @@ func NewAlerter(config *AlerterConfiguration) (Alerter, error) {
 }
 
 func (c *alerter) AlertToGroup(groupIds string, content *Content, alertType AlertType) error {
-	if !c.config.AlertAdmin {
-		return nil
-	}
-
 	ts := strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
 
 	text, err := content.Execute()
