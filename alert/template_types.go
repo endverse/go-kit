@@ -5,7 +5,7 @@ import (
 )
 
 type TemplateRender interface {
-	Tempalte() string
+	Template() string
 	Name() string
 }
 
@@ -33,7 +33,7 @@ func (t *ErrorTemplateRender) Name() string {
 	return "errorContent"
 }
 
-func (t *ErrorTemplateRender) Tempalte() string {
+func (t *ErrorTemplateRender) Template() string {
 	return `
 实验名称: {{.Template.ExpName}}
 作业名字: {{.Template.NickName}}
@@ -55,7 +55,7 @@ type NoticeTemplateRender struct {
 	EndTime   string
 }
 
-func (t *NoticeTemplateRender) Tempalte() string {
+func (t *NoticeTemplateRender) Template() string {
 	return `
 实验名称: {{.Template.ExpName}}
 作业名字: {{.Template.NickName}}

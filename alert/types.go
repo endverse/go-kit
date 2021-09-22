@@ -17,7 +17,7 @@ type Content struct {
 func (c *Content) Execute() (string, error) {
 	var w bytes.Buffer
 
-	templateRender := template.Must(template.New(c.Template.Name()).Parse(ContentTitle + c.Template.Tempalte()))
+	templateRender := template.Must(template.New(c.Template.Name()).Parse(ContentTitle + c.Template.Template()))
 
 	err := templateRender.Execute(&w, c)
 	if err != nil {
