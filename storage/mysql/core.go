@@ -20,19 +20,19 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type core struct {
+type Core struct {
 	db *gorm.DB
 
 	cfg *config.Configuration
 }
 
-func New(cfg *config.Configuration) *core {
-	return &core{
+func New(cfg *config.Configuration) *Core {
+	return &Core{
 		cfg: cfg,
 	}
 }
 
-func (c *core) Conn() error {
+func (c *Core) Conn() error {
 	var db *gorm.DB
 	var err error
 
@@ -54,8 +54,8 @@ func (c *core) Conn() error {
 
 // return a new core with GORM DB with context
 // WithContext change current instance db's context to ctx
-func (c *core) ctxDB(ctx context.Context) (*gorm.DB, error) {
-	iface := ctx.Value(ctxTransactionKey{})
+func (c *Core) ctxDB(ctx context.Context) (*gorm.DB, error) {
+	iface := ctx.Value(CtxTransactionKey{})
 
 	if iface != nil {
 		tx, ok := iface.(*gorm.DB)
@@ -72,7 +72,7 @@ func (c *core) ctxDB(ctx context.Context) (*gorm.DB, error) {
 // DB return gorm.DB, spanFinish func, some error.
 // If EnableTracing is false, spanFinish is a empty func.
 // param titles must has only one item.
-func (c *core) DB(ctx context.Context, titles ...string) (*gorm.DB, func(), error) {
+func (c *Core) DB(ctx context.Context, titles ...string) (*gorm.DB, func(), error) {
 	var spanFinish = func() {}
 	var title = "gromTracing"
 

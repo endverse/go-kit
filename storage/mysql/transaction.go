@@ -6,26 +6,26 @@ import (
 	"gorm.io/gorm"
 )
 
-type ctxTransactionKey struct{}
+type CtxTransactionKey struct{}
 
 func CtxWithTransaction(ctx context.Context, tx *gorm.DB) context.Context {
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	return context.WithValue(ctx, ctxTransactionKey{}, tx)
+	return context.WithValue(ctx, CtxTransactionKey{}, tx)
 }
 
-type txImpl struct {
+type TxImpl struct {
 	db *gorm.DB
 }
 
-func NewTxImpl(dbcore *core) *txImpl {
-	return &txImpl{
+func NewTxImpl(dbcore *Core) *TxImpl {
+	return &TxImpl{
 		db: dbcore.db,
 	}
 }
 
-func (t *txImpl) Transaction(ctx context.Context, fn func(txctx context.Context) error) error {
+func (t *TxImpl) Transaction(ctx context.Context, fn func(txctx context.Context) error) error {
 	db := t.db.WithContext(ctx)
 
 	return db.Transaction(func(tx *gorm.DB) error {
