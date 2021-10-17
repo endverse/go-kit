@@ -31,10 +31,7 @@ type Configuration struct {
 	QueryFields               bool
 	Colorful                  bool
 
-	EnableTracing   bool
-	TracingHostPort string
-	TracingUser     string
-	TracingPassword string
+	EnableTracing bool
 }
 
 func (o *Configuration) AddFlags(fs *pflag.FlagSet) {
@@ -60,9 +57,6 @@ func (o *Configuration) AddFlags(fs *pflag.FlagSet) {
 	fs.DurationVar(&o.SlowThreshold, "slow-threshold", o.SlowThreshold, "Mysql slow threshold.")
 	fs.IntVar(&o.MaxRetry, "max-retry", o.MaxRetry, "Max connect to the mysql server retry count.")
 	fs.BoolVar(&o.EnableTracing, "enable-tracing", o.EnableTracing, "Enable open tracing.")
-	fs.StringVar(&o.TracingHostPort, "tracing-host-port", o.TracingHostPort, "LocalAgentHostPort instructs reporter to send spans to jaeger-agent at this address.")
-	fs.StringVar(&o.TracingUser, "tracing-user", o.TracingUser, "User instructs reporter to include a user for basic http authentication when sending spans to jaeger-collector.")
-	fs.StringVar(&o.TracingPassword, "tracing-pwd", o.TracingPassword, "Password instructs reporter to include a password for basic http authentication when sending spans to jaeger-collector.")
 }
 
 func (o *Configuration) Validate() []error {
@@ -91,12 +85,6 @@ func (o *Configuration) Validate() []error {
 	case 1, 2, 3, 4:
 	default:
 		errs = append(errs, errors.New("Mysql.LogLevel only support '1, 2, 3, 4'"))
-	}
-
-	if o.EnableTracing {
-		if o.TracingHostPort == "" {
-			errs = append(errs, errors.New("Mysql tracingHostPort must not be empty with enableTracing is true"))
-		}
 	}
 
 	return errs
@@ -153,7 +141,4 @@ var DefaultConfiguratuin = &Configuration{
 	SkipDefaultTransaction:    false,
 	Colorful:                  true,
 	EnableTracing:             false,
-	TracingHostPort:           "",
-	TracingUser:               "",
-	TracingPassword:           "",
 }
