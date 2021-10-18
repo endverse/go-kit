@@ -1,6 +1,8 @@
 package codec
 
 import (
+	"bytes"
+	"encoding/gob"
 	"encoding/json"
 	"errors"
 	"reflect"
@@ -22,4 +24,10 @@ func Value(data interface{}) ([]byte, error) {
 	}
 
 	return json.Marshal(data)
+}
+
+func DeepCopy(in, out interface{}) {
+	buf := new(bytes.Buffer)
+	gob.NewEncoder(buf).Encode(in)
+	gob.NewDecoder(buf).Decode(out)
 }
