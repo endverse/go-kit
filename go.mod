@@ -18,6 +18,9 @@ require (
 	gorm.io/driver/mysql v1.1.2
 	gorm.io/gorm v1.21.16
 	helm.sh/helm/v3 v3.4.2
+	k8s.io/apimachinery v0.19.6
 	k8s.io/component-base v0.19.4
 	rsc.io/letsencrypt v0.0.3 // indirect
 )
+
+replace k8s.io/api => k8s.io/api v0.19.6
