@@ -30,7 +30,7 @@ type Time struct {
 }
 
 func (t *Time) UnmarshalJSON(b []byte) error {
-	if len(b) == 4 && string(b) == "null" {
+	if len(b) == 4 && (string(b) == "null" || string(b) == "") {
 		t.Time = gotime.Time{}
 		return nil
 	}
