@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
+	"time"
 	gotime "time"
 
 	"go-arsenal.kanzhun.tech/arsenal/go-kit/codec"
@@ -144,6 +145,14 @@ func LastSunday() Time {
 		offset = 7 - int(gotime.Now().Weekday())
 	}
 	return Time{gotime.Now().AddDate(0, 0, offset)}
+}
+
+func NowInLocation(location *time.Location) Time {
+	return Time{gotime.Now().In(location)}
+}
+
+func Now() Time {
+	return Time{gotime.Now().In(CST())}
 }
 
 func (t Time) In(location *gotime.Location) Time {
