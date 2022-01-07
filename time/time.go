@@ -25,6 +25,12 @@ func Layout() string {
 	return layout
 }
 
+func ParseInLocation(t string) Time {
+	tt, _ := time.ParseInLocation(layout, t, cst)
+
+	return Time{tt}
+}
+
 type Time struct {
 	gotime.Time
 }
