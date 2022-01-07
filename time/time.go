@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 	gotime "time"
 
@@ -35,6 +36,11 @@ func (t *Time) UnmarshalJSON(b []byte) error {
 		t.Time = gotime.Time{}
 		return nil
 	}
+
+	tmp := string(b)
+	tmp = strings.TrimPrefix(tmp, "\"")
+	tmp = strings.TrimSuffix(tmp, "\"")
+	b = []byte(tmp)
 
 	var str string
 	err := json.Unmarshal(b, &str)
