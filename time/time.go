@@ -2,9 +2,7 @@ package time
 
 import (
 	"database/sql/driver"
-	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 	gotime "time"
 
@@ -37,18 +35,7 @@ func (t *Time) UnmarshalJSON(b []byte) error {
 		return nil
 	}
 
-	tmp := string(b)
-	tmp = strings.TrimPrefix(tmp, "\"")
-	tmp = strings.TrimSuffix(tmp, "\"")
-	b = []byte(tmp)
-
-	var str string
-	err := json.Unmarshal(b, &str)
-	if err != nil {
-		return err
-	}
-
-	pt, err := gotime.ParseInLocation(layout, str, cst)
+	pt, err := gotime.ParseInLocation(layout, string(b), cst)
 	if err != nil {
 		return err
 	}
