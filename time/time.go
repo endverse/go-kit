@@ -2,6 +2,7 @@ package time
 
 import (
 	"database/sql/driver"
+	"encoding/json"
 	"fmt"
 	"time"
 	gotime "time"
@@ -35,27 +36,38 @@ type Time struct {
 	gotime.Time
 }
 
+// UnmarshalJSON implements the json.Unmarshaller interface.
 func (t *Time) UnmarshalJSON(b []byte) error {
 	if (len(b) == 4 && string(b) == "null") || (len(b) == 2 && string(b) == "\"\"") {
 		t.Time = gotime.Time{}
 		return nil
 	}
 
-	pt, err := gotime.ParseInLocation(layout, string(b), cst)
+	var str string
+	err := json.Unmarshal(b, &str)
 	if err != nil {
 		return err
 	}
+
+	pt, err := gotime.ParseInLocation(layout, str, cst)
+	if err != nil {
+		return err
+	}
+
 	t.Time = pt.Local()
 	return nil
 }
 
+// MarshalJSON implements the json.Marshaler interface.
 func (t Time) MarshalJSON() ([]byte, error) {
 	if t.IsZero() {
+		// Encode unset/nil objects as JSON's "null".
 		return []byte("null"), nil
 	}
 
 	buf := make([]byte, 0, len(layout)+2)
 	buf = append(buf, '"')
+	// time cannot contain non escapable JSON characters
 	buf = t.In(cst).AppendFormat(buf, layout)
 	buf = append(buf, '"')
 	return buf, nil
@@ -76,93 +88,15 @@ func (t *Time) IsZero() bool {
 	return t.Time.IsZero()
 }
 
-func Today() Time {
-	return Time{gotime.Now()}
-}
-
-func Yesterday() Time {
-	return Time{gotime.Now().AddDate(0, 0, -1)}
-}
-
-func Tomorrow() Time {
-	return Time{gotime.Now().AddDate(0, 0, 1)}
-}
-
-func AnchorTime(years int, months int, days int) Time {
-	return Time{gotime.Now().In(Location()).AddDate(years, months, days)}
-}
-
-// ********************* The days of the week. ********************* //
-func Monday() Time {
-	offset := int(gotime.Monday - gotime.Now().Weekday())
-	if offset > 0 {
-		offset = -6
-	}
-	return Time{gotime.Now().AddDate(0, 0, offset)}
-}
-
-func Tuesday() Time {
-	offset := int(gotime.Tuesday - gotime.Now().Weekday())
-	return Time{gotime.Now().AddDate(0, 0, offset)}
-}
-
-func Wednesday() Time {
-	offset := int(gotime.Wednesday - gotime.Now().Weekday())
-	return Time{gotime.Now().AddDate(0, 0, offset)}
-}
-
-func Thursday() Time {
-	offset := int(gotime.Thursday - gotime.Now().Weekday())
-	return Time{gotime.Now().AddDate(0, 0, offset)}
-}
-
-func Friday() Time {
-	offset := int(gotime.Friday - gotime.Now().Weekday())
-	return Time{gotime.Now().AddDate(0, 0, offset)}
-}
-
-func Saturday() Time {
-	offset := int(gotime.Saturday - gotime.Now().Weekday())
-	return Time{gotime.Now().AddDate(0, 0, offset)}
-}
-
-func Sunday() Time {
-	offset := int(gotime.Sunday - gotime.Now().Weekday())
-	if offset < 0 {
-		offset = 7 - int(gotime.Now().Weekday())
-	}
-	return Time{gotime.Now().AddDate(0, 0, offset)}
-}
-
-func LastMonday() Time {
-	return Time{Monday().AddDate(0, 0, -7)}
-}
-
-func LastSunday() Time {
-	offset := int(gotime.Sunday - gotime.Now().Weekday())
-	if offset == 0 {
-		offset = 7 - int(gotime.Now().Weekday())
-	}
-	return Time{gotime.Now().AddDate(0, 0, offset)}
-}
-
-func NowInLocation(location *time.Location) Time {
-	return Time{gotime.Now().In(location)}
-}
-
-func Now() Time {
-	return Time{gotime.Now().In(CST())}
-}
-
-func (t Time) In(location *gotime.Location) Time {
+func (t *Time) In(location *gotime.Location) Time {
 	return Time{t.Time.In(location)}
 }
 
-func (t Time) CST() Time {
+func (t *Time) CST() Time {
 	return Time{t.Time.In(CST())}
 }
 
-func (t Time) Location() *gotime.Location {
+func (t *Time) Location() *gotime.Location {
 	if t.Time.IsZero() {
 		return cst
 	}
@@ -170,9 +104,9 @@ func (t Time) Location() *gotime.Location {
 	return t.Time.Location()
 }
 
-func (t Time) Start() Time {
-	if t.Time.IsZero() {
-		return t
+func (t *Time) Start() Time {
+	if t == nil || t.Time.IsZero() {
+		return Time{}
 	}
 
 	start := fmt.Sprintf("%04d-%02d-%02d 00:00:00", t.Year(), t.Month(), t.Day())
@@ -180,9 +114,9 @@ func (t Time) Start() Time {
 	return Time{startTime}
 }
 
-func (t Time) End() Time {
-	if t.Time.IsZero() {
-		return t
+func (t *Time) End() Time {
+	if t.Time.IsZero() || t.Time.IsZero() {
+		return Time{}
 	}
 
 	end := fmt.Sprintf("%04d-%02d-%02d 23:59:59", t.Year(), t.Month(), t.Day())
@@ -190,16 +124,16 @@ func (t Time) End() Time {
 	return Time{endTime}
 }
 
-func (t Time) Date() string {
-	if t.Time.IsZero() {
+func (t *Time) Date() string {
+	if t == nil || t.Time.IsZero() {
 		return ""
 	}
 
 	return t.Format("2006-01-02")
 }
 
-func (t Time) String() string {
-	if t.Time.IsZero() {
+func (t *Time) String() string {
+	if t == nil || t.Time.IsZero() {
 		return ""
 	}
 
