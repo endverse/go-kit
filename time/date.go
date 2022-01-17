@@ -85,3 +85,7 @@ func NowInLocation(location *time.Location) *Time {
 func Now() *Time {
 	return &Time{gotime.Now().In(CST())}
 }
+
+func New(t gotime.Time) *Time {
+	return &Time{t}
+}
