@@ -163,25 +163,45 @@ func (t Time) CST() Time {
 }
 
 func (t Time) Location() *gotime.Location {
+	if t.Time.IsZero() {
+		return cst
+	}
+
 	return t.Time.Location()
 }
 
 func (t Time) Start() Time {
+	if t.Time.IsZero() {
+		return t
+	}
+
 	start := fmt.Sprintf("%04d-%02d-%02d 00:00:00", t.Year(), t.Month(), t.Day())
 	startTime, _ := gotime.ParseInLocation(Layout(), start, t.Time.Location())
 	return Time{startTime}
 }
 
 func (t Time) End() Time {
+	if t.Time.IsZero() {
+		return t
+	}
+
 	end := fmt.Sprintf("%04d-%02d-%02d 23:59:59", t.Year(), t.Month(), t.Day())
 	endTime, _ := gotime.ParseInLocation(Layout(), end, t.Time.Location())
 	return Time{endTime}
 }
 
 func (t Time) Date() string {
+	if t.Time.IsZero() {
+		return ""
+	}
+
 	return t.Format("2006-01-02")
 }
 
 func (t Time) String() string {
+	if t.Time.IsZero() {
+		return ""
+	}
+
 	return t.Format(Layout())
 }
