@@ -26,10 +26,10 @@ func Layout() string {
 	return layout
 }
 
-func ParseInLocation(t string) Time {
+func ParseInLocation(t string) *Time {
 	tt, _ := time.ParseInLocation(layout, t, cst)
 
-	return Time{tt}
+	return &Time{tt}
 }
 
 type Time struct {
@@ -88,12 +88,12 @@ func (t *Time) IsZero() bool {
 	return t.Time.IsZero()
 }
 
-func (t *Time) In(location *gotime.Location) Time {
-	return Time{t.Time.In(location)}
+func (t *Time) In(location *gotime.Location) *Time {
+	return &Time{t.Time.In(location)}
 }
 
-func (t *Time) CST() Time {
-	return Time{t.Time.In(CST())}
+func (t *Time) CST() *Time {
+	return &Time{t.Time.In(CST())}
 }
 
 func (t *Time) Location() *gotime.Location {
@@ -104,24 +104,24 @@ func (t *Time) Location() *gotime.Location {
 	return t.Time.Location()
 }
 
-func (t *Time) Start() Time {
+func (t *Time) Start() *Time {
 	if t == nil || t.Time.IsZero() {
-		return Time{}
+		return &Time{}
 	}
 
 	start := fmt.Sprintf("%04d-%02d-%02d 00:00:00", t.Year(), t.Month(), t.Day())
 	startTime, _ := gotime.ParseInLocation(Layout(), start, t.Time.Location())
-	return Time{startTime}
+	return &Time{startTime}
 }
 
-func (t *Time) End() Time {
+func (t *Time) End() *Time {
 	if t.Time.IsZero() || t.Time.IsZero() {
-		return Time{}
+		return &Time{}
 	}
 
 	end := fmt.Sprintf("%04d-%02d-%02d 23:59:59", t.Year(), t.Month(), t.Day())
 	endTime, _ := gotime.ParseInLocation(Layout(), end, t.Time.Location())
-	return Time{endTime}
+	return &Time{endTime}
 }
 
 func (t *Time) Date() string {
