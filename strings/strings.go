@@ -81,6 +81,13 @@ func (r *randomString) ToUpper() *randomString {
 	}
 }
 
+// RandomDigits returns a byte slice of the given length containing
+// pseudorandom numbers in range 0-9. The slice can be used as a captcha
+// solution.
+func RandomDigits(length int) []byte {
+	return randomBytesMod(length, 10)
+}
+
 // randomId returns a new random id string.
 func RandomString(l int) *randomString {
 	var length int
@@ -110,4 +117,16 @@ func CutString(s string, i int) string {
 	}
 
 	return s[:i]
+}
+
+func FirstLetterToLower(s string) string {
+	if s == "" {
+		return ""
+	}
+
+	if len(s) == 1 {
+		return strings.ToLower(s)
+	}
+
+	return strings.ToLower(s[:1]) + s[1:]
 }
