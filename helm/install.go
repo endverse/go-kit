@@ -10,7 +10,7 @@ import (
 	"helm.sh/helm/v3/pkg/downloader"
 	"helm.sh/helm/v3/pkg/getter"
 
-	kitstrings "go-arsenal.kanzhun.tech/arsenal/go-kit/strings"
+	kitstrings "zeus-techs/zeus-techs/go-kit/strings"
 )
 
 func (c *HelmClient) install(chart, version string, values map[string]interface{}) (string, string, error) {

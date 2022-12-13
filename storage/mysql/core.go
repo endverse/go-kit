@@ -6,9 +6,9 @@ import (
 	"reflect"
 	"time"
 
-	"go-arsenal.kanzhun.tech/arsenal/go-kit/retry"
-	"go-arsenal.kanzhun.tech/arsenal/go-kit/storage/mysql/config"
-	"go-arsenal.kanzhun.tech/arsenal/go-kit/storage/mysql/tracing"
+	"zeus-techs/go-kit/retry"
+	"zeus-techs/go-kit/storage/mysql/config"
+	"zeus-techs/go-kit/storage/mysql/tracing"
 
 	"github.com/hex-techs/klog"
 	"gorm.io/driver/mysql"
