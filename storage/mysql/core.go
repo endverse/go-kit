@@ -6,9 +6,11 @@ import (
 	"reflect"
 	"time"
 
-	"zeus-techs/go-kit/retry"
-	"zeus-techs/go-kit/storage/mysql/config"
-	"zeus-techs/go-kit/storage/mysql/tracing"
+	"github.com/zeus-techs/go-kit/storage/mysql/config"
+
+	"github.com/zeus-techs/go-kit/storage/mysql/tracing"
+
+	"github.com/zeus-techs/go-kit/retry"
 
 	"github.com/hex-techs/klog"
 	"gorm.io/driver/mysql"

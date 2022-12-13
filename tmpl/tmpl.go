@@ -9,7 +9,7 @@ import (
 	"text/template"
 	"unicode"
 
-	"zeus-techs/go-kit/term"
+	"github.com/zeus-techs/go-kit/term"
 
 	"github.com/spf13/cobra"
 	cliflag "k8s.io/component-base/cli/flag"

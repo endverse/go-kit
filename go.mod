@@ -1,4 +1,4 @@
-module zeus-techs/go-kit
+module github.com/zeus-techs/go-kit
 
 go 1.19
 

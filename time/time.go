@@ -7,7 +7,7 @@ import (
 	"time"
 	gotime "time"
 
-	"zeus-techs/go-kit/codec"
+	"github.com/zeus-techs/go-kit/codec"
 )
 
 const layout = "2006-01-02 15:04:05"
