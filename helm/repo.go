@@ -16,7 +16,7 @@ import (
 	"helm.sh/helm/v3/pkg/getter"
 	"helm.sh/helm/v3/pkg/repo"
 
-	"zeus-techs/zeus-techs/go-kit/retry"
+	"zeus-techs/go-kit/retry"
 )
 
 func (c *HelmClient) repoAdd(name, url string) (string, string, error) {
