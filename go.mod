@@ -1,4 +1,4 @@
-module github.com/zeus-techs/go-kit
+module github.com/endverse/go-kit
 
 go 1.19
 

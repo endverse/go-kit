@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	ahash "github.com/zeus-techs/go-kit/hash"
+	ahash "github.com/endverse/go-kit/hash"
 )
 
 func generateHMAC(params map[string]string, sk string) string {
