@@ -3,7 +3,7 @@ package helm
 import (
 	"fmt"
 
-	"github.com/hex-techs/klog"
+	"github.com/endverse/log/log"
 	"github.com/pkg/errors"
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/chart/loader"
@@ -53,7 +53,7 @@ func (c *HelmClient) install(chart, version string, values map[string]interface{
 	}
 
 	if chartRequested.Metadata.Deprecated {
-		klog.Warningf("This chart [%s] is deprecated", chartRequested.Name())
+		log.Warnf("This chart [%s] is deprecated", chartRequested.Name())
 	}
 
 	if req := chartRequested.Metadata.Dependencies; req != nil {
@@ -107,7 +107,7 @@ func (c *HelmClient) install(chart, version string, values map[string]interface{
 	// replace with install succeeded release.Manifest
 	manifest = rel.Manifest
 
-	klog.Infof("release installed successfully: %s/%s-%s", rel.Name, rel.Name, rel.Chart.Metadata.Version)
+	log.Infof("release installed successfully: %s/%s-%s", rel.Name, rel.Name, rel.Chart.Metadata.Version)
 
 	return manifest, client.ReleaseName, nil
 }
@@ -118,7 +118,7 @@ func (c *HelmClient) lint(chartPath string, values map[string]interface{}) error
 	result := client.Run([]string{chartPath}, values)
 
 	for _, err := range result.Errors {
-		klog.Infof("Error %s", err)
+		log.Infof("Error %s", err)
 	}
 
 	if len(result.Errors) > 0 {

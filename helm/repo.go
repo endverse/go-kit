@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/endverse/log/log"
 	"github.com/gofrs/flock"
-	"github.com/hex-techs/klog"
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 	"helm.sh/helm/v3/pkg/getter"
@@ -52,7 +52,7 @@ func (c *HelmClient) repoAdd(name, url string) (string, string, error) {
 	}
 
 	if f.Has(name) {
-		klog.Infof("repository name (%s) already exists", name)
+		log.Infof("repository name (%s) already exists", name)
 		return repoFile, cache, nil
 	}
 
@@ -82,11 +82,11 @@ func (c *HelmClient) repoAdd(name, url string) (string, string, error) {
 	f.Update(&e)
 
 	if err := f.WriteFile(repoFile, 0644); err != nil {
-		klog.Error(err)
+		log.Error(err)
 		os.Exit(3)
 	}
 
-	klog.Infof("%q has been added to your repositories", name)
+	log.Infof("%q has been added to your repositories", name)
 	return repoFile, cache, nil
 }
 
@@ -138,28 +138,28 @@ func (o *repoUpdateOptions) run() error {
 }
 
 func updateCharts(repos []*repo.ChartRepository) error {
-	klog.Info("Hang tight while we grab the latest from your chart repositories...")
+	log.Info("Hang tight while we grab the latest from your chart repositories...")
 	var wg sync.WaitGroup
 	var repoFailList []string
 	for _, re := range repos {
 		wg.Add(1)
 		go func(re *repo.ChartRepository) {
 			defer wg.Done()
-			klog.Infof("updating repo (%s) %s...", re.Config.Name, re.Config.URL)
+			log.Infof("updating repo (%s) %s...", re.Config.Name, re.Config.URL)
 			if _, err := re.DownloadIndexFile(); err != nil {
-				klog.Errorf("...Unable to get an update from the %q chart repository (%s): %v", re.Config.Name, re.Config.URL, err)
+				log.Errorf("...Unable to get an update from the %q chart repository (%s): %v", re.Config.Name, re.Config.URL, err)
 				repoFailList = append(repoFailList, re.Config.URL)
 			} else {
-				klog.Infof("...Successfully got an update from the %q chart repository", re.Config.Name)
+				log.Infof("...Successfully got an update from the %q chart repository", re.Config.Name)
 			}
 		}(re)
 	}
 	wg.Wait()
 
 	if len(repoFailList) > 0 {
-		klog.Warningf("Failed to update the following repositories: %v", repoFailList)
+		log.Warnf("Failed to update the following repositories: %v", repoFailList)
 	}
 
-	klog.Info("Update Complete. ⎈Happy Helming!⎈")
+	log.Info("Update Complete. ⎈Happy Helming!⎈")
 	return nil
 }

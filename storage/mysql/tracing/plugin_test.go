@@ -6,13 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hex-techs/klog"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	"github.com/uber/jaeger-client-go/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
@@ -76,12 +74,12 @@ func TestOpentracing(t *testing.T) {
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{SingularTable: true},
-		Logger: logger.New(&klog.GormLoggerWriter{}, logger.Config{
-			SlowThreshold:             200 * time.Microsecond,
-			LogLevel:                  logger.LogLevel(4),
-			IgnoreRecordNotFoundError: false,
-			Colorful:                  true,
-		}),
+		// Logger: logger.New(&log.GormLoggerWriter{}, logger.Config{
+		// 	SlowThreshold:             200 * time.Microsecond,
+		// 	LogLevel:                  logger.LogLevel(4),
+		// 	IgnoreRecordNotFoundError: false,
+		// 	Colorful:                  true,
+		// }),
 	})
 	if err != nil {
 		t.Fatal(err)

@@ -1,11 +1,9 @@
 package helm
 
 import (
-	"fmt"
-	"log"
 	"os"
 
-	"github.com/hex-techs/klog"
+	"github.com/endverse/log/log"
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/cli"
 	"helm.sh/helm/v3/pkg/release"
@@ -31,9 +29,8 @@ type HelmClient struct {
 var settings = cli.New()
 
 func logFunc(format string, v ...interface{}) {
-	log.SetFlags(log.Llongfile)
-	format = fmt.Sprintf("[helm client] %s\n", format)
-	log.Output(2, fmt.Sprintf(format, v...))
+	logger := log.GlobalLogger().WithField("helm", "client")
+	logger.Infof(format, v...)
 }
 
 func NewHelmClient(namespace string) *HelmClient {
@@ -49,7 +46,7 @@ func NewHelmClient(namespace string) *HelmClient {
 
 	repoFile, cache, err := hc.RepoAdd(getRepoName(), getRepoUrl())
 	if err != nil {
-		klog.Fatal(err)
+		log.Fatal(err)
 	}
 
 	settings.RepositoryConfig = repoFile

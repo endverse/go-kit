@@ -1,14 +1,13 @@
 package helm
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"reflect"
 	"strings"
 	"testing"
 
-	"github.com/hex-techs/klog"
+	"github.com/endverse/log/log"
 	githuberrors "github.com/pkg/errors"
 )
 
@@ -34,34 +33,31 @@ func TestHelmClientList(t *testing.T) {
 	}
 
 	for _, res := range results {
-		klog.Infof("helm release name: %v", res.Name)
-		klog.Infof("helm release info: %#v", *res.Info)
-		klog.Infof("helm release chart: %#v", *res.Chart.Metadata)
-		klog.Infof("helm release config: %v", res.Config)
-		klog.Infof("helm release hooks: %v", res.Hooks)
-		klog.Infof("helm release version: %v", res.Version)
-		klog.Infof("helm release namespace: %v", res.Namespace)
-		klog.Infof("helm release labels: %v", res.Labels)
+		log.Infof("helm release name: %v", res.Name)
+		log.Infof("helm release info: %#v", *res.Info)
+		log.Infof("helm release chart: %#v", *res.Chart.Metadata)
+		log.Infof("helm release config: %v", res.Config)
+		log.Infof("helm release hooks: %v", res.Hooks)
+		log.Infof("helm release version: %v", res.Version)
+		log.Infof("helm release namespace: %v", res.Namespace)
+		log.Infof("helm release labels: %v", res.Labels)
 	}
 }
 
 func TestHelmClientUninstall(t *testing.T) {
-	klog.InitFlags(nil)
-	flag.Parse()
-
 	helmClient := NewHelmClient("kf-partition")
 
 	result, err := helmClient.Uninstall("ada3884db7ba2f")
 	if err != nil {
 		t.Error(err)
-		klog.Error(githuberrors.Cause(err))
+		log.Error(githuberrors.Cause(err))
 		if strings.Contains(err.Error(), "release: not found") {
-			klog.Error("release not found, continue")
+			log.Error("release not found, continue")
 		}
-		klog.Error(reflect.TypeOf(err))
+		log.Error(reflect.TypeOf(err))
 		os.Exit(1)
 	}
 
-	klog.Infof("helm uninstall name: %v", result.Release.Name)
-	klog.Infof("helm uninstall info: %#v", *result.Release.Info)
+	log.Infof("helm uninstall name: %v", result.Release.Name)
+	log.Infof("helm uninstall info: %#v", *result.Release.Info)
 }

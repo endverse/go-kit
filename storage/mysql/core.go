@@ -12,10 +12,8 @@ import (
 
 	"github.com/endverse/go-kit/retry"
 
-	"github.com/hex-techs/klog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
@@ -75,12 +73,12 @@ func connect(cfg *config.Configuration) (*gorm.DB, error) {
 		PrepareStmt:            cfg.PrepareStmt,
 		QueryFields:            cfg.QueryFields,
 		NamingStrategy:         schema.NamingStrategy{SingularTable: cfg.SingularTable},
-		Logger: logger.New(&klog.GormLoggerWriter{}, logger.Config{
-			SlowThreshold:             cfg.SlowThreshold,
-			LogLevel:                  logger.LogLevel(cfg.LogLevel),
-			IgnoreRecordNotFoundError: cfg.IgnoreRecordNotFoundError,
-			Colorful:                  cfg.Colorful,
-		}),
+		// Logger: logger.New(&log.GlobalLogger(), logger.Config{
+		// 	SlowThreshold:             cfg.SlowThreshold,
+		// 	LogLevel:                  logger.LogLevel(cfg.LogLevel),
+		// 	IgnoreRecordNotFoundError: cfg.IgnoreRecordNotFoundError,
+		// 	Colorful:                  cfg.Colorful,
+		// }),
 	})
 	if err != nil {
 		return nil, err
