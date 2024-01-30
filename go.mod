@@ -3,7 +3,7 @@ module github.com/endverse/go-kit
 go 1.21.5
 
 require (
-	github.com/endverse/log v1.0.1
+	github.com/endverse/log v1.0.3
 	github.com/go-resty/resty/v2 v2.6.0
 	github.com/gofrs/flock v0.8.0
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6
